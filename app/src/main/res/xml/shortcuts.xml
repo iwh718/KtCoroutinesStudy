@@ -1,16 +1,26 @@
-<shortcuts xmlns:android="https://schemas.android.com/apk/res/android">
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-            android:shortcutId="add_website"
+            android:shortcutId="shortcut1"
             android:enabled="true"
-            android:icon="@drawable/ic_fab_play"
-            android:shortcutShortLabel="@strings/shorts_1"
-            android:shortcutLongLabel="@strings/shorts_2"
-            android:shortcutDisabledMessage="@strings/short_3">
+            android:icon="@drawable/ic_launcher_one"
+            android:shortcutShortLabel="@string/short_1"
+            android:shortcutLongLabel="@string/short_2"
+            android:shortcutDisabledMessage="@string/short_3">
         <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="com.simplewen.win0.ktcoroutinesstudy"
-                android:targetClass="com.simplewen.win0.ktcoroutinesstudy.MainActivity" />
-        <categories android:name="android.shortcut.conversation"/>
-
+            android:action="IWH"
+            android:targetPackage="iwh.com.simplewen.win0.ktcoroutinesstudy"
+            android:targetClass="iwh.com.simplewen.win0.ktcoroutinesstudy.MainActivity" />
+    </shortcut>
+    <shortcut
+            android:shortcutId="shortcut2"
+            android:enabled="true"
+            android:icon="@drawable/ic_launcher_one"
+            android:shortcutShortLabel="@string/short_1"
+            android:shortcutLongLabel="@string/short_2"
+            android:shortcutDisabledMessage="@string/short_3">
+        <intent
+                android:action="IWH2"
+                android:targetPackage="iwh.com.simplewen.win0.ktcoroutinesstudy"
+                android:targetClass="iwh.com.simplewen.win0.ktcoroutinesstudy.MainActivity" />
     </shortcut>
 </shortcuts>

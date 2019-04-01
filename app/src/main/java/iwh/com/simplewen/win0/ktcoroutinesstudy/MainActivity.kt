@@ -1,7 +1,8 @@
-package com.simplewen.win0.ktcoroutinesstudy
+package iwh.com.simplewen.win0.ktcoroutinesstudy
+
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -42,15 +43,25 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
     private lateinit var ani: ObjectAnimator
     private lateinit var flag1: Job
     private lateinit var flag2: Job
+    //扩展函数，简化Toast
+    private fun MainActivity.tos(str: String = "IWH") {
+        Toast.makeText(this@MainActivity, str, Toast.LENGTH_SHORT).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
         toolbar.subtitle = "kotlin练习demo"
+        //检测shortCuts
+        when (intent.action) {
+            "IWH" -> tos("通过shortCuts进入：${intent.action}")
+            "IWH2" -> tos("通过shortCuts2进入：${intent.action}")
+        }
 
         //设置侧滑栏
-        val toggle =   ActionBarDrawerToggle(this@MainActivity,draw,toolbar,R.string.app_name, R.string.app_name)
+        val toggle = ActionBarDrawerToggle(this@MainActivity, draw, toolbar, R.string.app_name, R.string.app_name)
         draw.addDrawerListener(toggle)
         toggle.syncState()
         nav.setNavigationItemSelectedListener(this@MainActivity)
@@ -63,7 +74,7 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
                 if (!(flag1.isActive && flag2.isActive)) {
                     initCoroutines()
                 }
-                Snackbar.make(toolbar,"开始协程",Snackbar.LENGTH_LONG).setAction("取消"){
+                Snackbar.make(toolbar, "开始协程", Snackbar.LENGTH_LONG).setAction("取消") {
                     flag1.cancel()
                     flag2.cancel()
                     swipe.isRefreshing = false
@@ -86,11 +97,11 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
                 fabAnimation()
                 flag1.cancel()
                 flag2.cancel()
-                Toast.makeText(this@MainActivity, "协程已经取消！", Toast.LENGTH_SHORT).show()
+                tos("协程已经取消！")
                 swipe.isRefreshing = false
                 setFab(1)
             } else {
-                Toast.makeText(this@MainActivity, "重新启动协程！", Toast.LENGTH_SHORT).show()
+                tos("重新启动协程！")
                 initCoroutines()
 
             }
@@ -121,7 +132,7 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
             ktCor.text = "${ktCor.text}${ms[it]}"
             toolbar.title = "${toolbar.title}${ms3[it]}"
         }
-        Toast.makeText(this@MainActivity, "完成1", Toast.LENGTH_SHORT).show()
+        tos("完成1")
         swipe.isRefreshing = false
         fabAnimation()
 
@@ -134,36 +145,39 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
             delay(600)
             ktCor2.text = "${ktCor2.text}${ms2[it]}"
         }
-        Toast.makeText(this@MainActivity, "完成2！", Toast.LENGTH_SHORT).show()
+        tos("完成2！")
         setFab(1)
         fabAnimation()
 
     }
 
-
+    //工具栏菜单
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
-
+    //导航菜单
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-      return  when (p0.itemId) {
+        return when (p0.itemId) {
             R.id.nav_1 -> {
-                Toast.makeText(this@MainActivity,"你点击：${p0.itemId}",Toast.LENGTH_SHORT).show()
+               tos("你点击：item1")
                 draw.closeDrawer(GravityCompat.START)
-                return true
+                true
             }
-          R.id.nav_2 ->{
-
-              true
-          }
+            R.id.nav_2 -> {
+                tos("你点击：item2")
+                draw.closeDrawer(GravityCompat.START)
+                true
+            }
             else -> true
         }
 
     }
+
     override fun onBackPressed() {
-        if(draw.isDrawerOpen(GravityCompat.START)) draw.closeDrawer(GravityCompat.START) else finish()
+        if (draw.isDrawerOpen(GravityCompat.START)) draw.closeDrawer(GravityCompat.START) else finish()
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
@@ -179,8 +193,7 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
                             delay(2000L)
                             //当前协程：Thread[main,5,main]}，可以访问UI组件
                             Log.d("@@thread1:", "${Thread.currentThread()} ")
-                            Toast.makeText(this@MainActivity, "t1${Thread.currentThread()} 子协程1启动", Toast.LENGTH_SHORT)
-                                .show()
+                            tos("t1${Thread.currentThread()} 子协程1启动")
                         }
                         //该线程在  Thread[Thread-9,5,main]
                         Log.d("@@thread2:", Thread.currentThread().toString())
@@ -190,17 +203,16 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
                     //当前协程为Io协程，切换到主协程
                     withContext(Dispatchers.Main) {
                         delay(2000L)
-                        Toast.makeText(this@MainActivity, "t2${Thread.currentThread()} IO协程执行完成！", Toast.LENGTH_SHORT)
-                            .show()
+                       tos("t2${Thread.currentThread()} IO协程执行完成！")
                         dia.dismiss()
                     }
                 }
-                Toast.makeText(this@MainActivity, "t3${Thread.currentThread()}Io协程 在 主协程启动", Toast.LENGTH_SHORT).show()
+               tos("t3${Thread.currentThread()}Io协程 在 主协程启动")
                 //当前协程 主协程：Thread[main,5,main]}
                 Log.d("@@thread4:", Thread.currentThread().toString())
                 true
             }
-            R.id.colorSelect ->{
+            R.id.colorSelect -> {
                 changeColor()
                 true
             }
@@ -236,17 +248,19 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
     }
 
     //更改主色调
-    private fun changeColor(){
-       if(currentColorMode === "sun"){
-           toolbar.setBackgroundColor(Color.BLACK)
-           window.statusBarColor = Color.BLACK
-           fab.setBackgroundColor(Color.BLACK)
-           currentColorMode = "night"
-       }else{
-           toolbar.setBackgroundColor(ContextCompat.getColor(this@MainActivity,R.color.colorPrimary))
-           window.statusBarColor = ContextCompat.getColor(this@MainActivity,R.color.colorPrimaryDark)
-           fab.setBackgroundColor(ContextCompat.getColor(this@MainActivity,R.color.colorAccent))
-           currentColorMode = "sun"
-       }
+    private fun changeColor() {
+        if (currentColorMode === "sun") {
+            toolbar.setBackgroundColor(Color.BLACK)
+            window.statusBarColor = Color.BLACK
+            fab.setBackgroundColor(Color.BLACK)
+            currentColorMode = "night"
+        } else {
+            toolbar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
+            window.statusBarColor = ContextCompat.getColor(this@MainActivity, R.color.colorPrimaryDark)
+            fab.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.colorAccent))
+            currentColorMode = "sun"
+        }
     }
+
+
 }
