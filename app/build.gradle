@@ -7,8 +7,8 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "iwh.com.simplewen.win0.ktcoroutinesstudy"
-        minSdkVersion 23
+        applicationId "com.simplewen.win0.ktcoroutinesstudy"
+        minSdkVersion 25
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"

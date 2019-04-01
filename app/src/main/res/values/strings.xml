@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">KtCoroutinesStudy</string>
     <string name="action_settings">Settings</string>
+    <string name="coroutines">协程</string>
+    <string name="short_1">开始协程</string>
+    <string name="short_2">开始第一个协程</string>
+    <string name="short_3">暂时不可用</string>
 </resources>

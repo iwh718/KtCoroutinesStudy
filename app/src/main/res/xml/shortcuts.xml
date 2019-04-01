@@ -1,0 +1,16 @@
+<shortcuts xmlns:android="https://schemas.android.com/apk/res/android">
+    <shortcut
+            android:shortcutId="add_website"
+            android:enabled="true"
+            android:icon="@drawable/ic_fab_play"
+            android:shortcutShortLabel="@strings/shorts_1"
+            android:shortcutLongLabel="@strings/shorts_2"
+            android:shortcutDisabledMessage="@strings/short_3">
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.simplewen.win0.ktcoroutinesstudy"
+                android:targetClass="com.simplewen.win0.ktcoroutinesstudy.MainActivity" />
+        <categories android:name="android.shortcut.conversation"/>
+
+    </shortcut>
+</shortcuts>
