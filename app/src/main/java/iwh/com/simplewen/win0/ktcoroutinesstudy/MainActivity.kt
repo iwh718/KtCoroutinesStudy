@@ -2,7 +2,11 @@ package iwh.com.simplewen.win0.ktcoroutinesstudy
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
 import android.graphics.Color
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -10,6 +14,10 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
+import android.text.Layout
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -58,6 +66,45 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
         when (intent.action) {
             "IWH" -> tos("通过shortCuts进入：${intent.action}")
             "IWH2" -> tos("通过shortCuts2进入：${intent.action}")
+            "IWH3" -> tos("通过动态创建的shortCuts进入:${intent.action}")
+        }
+        //动态创建shortCUts
+        getSystemService(ShortcutManager::class.java).apply {
+            val s1 = ShortcutInfo.Builder(this@MainActivity, "short_3")
+                .setShortLabel("动态创建的shortCuts 3")
+                .setLongLabel("启动协程3")
+                .setIcon(Icon.createWithResource(this@MainActivity, R.drawable.ic_launcher_one))
+                .setDisabledMessage("暂时不可以使用！")
+                .setIntent(Intent(
+                    this@MainActivity, iwh.com.simplewen.win0.ktcoroutinesstudy.MainActivity::class.java)
+                    .apply { action = "IWH3" })
+                .build()
+            this.dynamicShortcuts = Arrays.asList(s1)
+        }
+        //设置Recycle列表
+        val myRecycle  = recycle
+        val myRecycleHor = recycle_hor
+        val myRecycleStagger = recycle_stagger
+        val sym = StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL)
+        val lym = LinearLayoutManager(this)
+        val hym = LinearLayoutManager(this).apply{
+            this.orientation = LinearLayoutManager.HORIZONTAL
+        }
+        //竖向Recycle
+        myRecycle.apply{
+            this.layoutManager = lym
+            this.adapter = MyRecycle(20)
+
+        }
+        //横向Recycle
+        myRecycleHor.apply{
+            this.layoutManager =hym
+            this.adapter = MyRecycle(10,1)
+        }
+        //瀑布流
+        myRecycleStagger.apply{
+            this.layoutManager = sym
+            this.adapter = MyRecycle(max = 10)
         }
 
         //设置侧滑栏
@@ -156,17 +203,17 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
+
     //导航菜单
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         return when (p0.itemId) {
             R.id.nav_1 -> {
-               tos("你点击：item1")
+                tos("你点击：item1")
                 draw.closeDrawer(GravityCompat.START)
                 true
             }
             R.id.nav_2 -> {
-                tos("你点击：item2")
-                draw.closeDrawer(GravityCompat.START)
+                startActivity(Intent(this@MainActivity,Main2Activity::class.java))
                 true
             }
             else -> true
@@ -203,11 +250,11 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
                     //当前协程为Io协程，切换到主协程
                     withContext(Dispatchers.Main) {
                         delay(2000L)
-                       tos("t2${Thread.currentThread()} IO协程执行完成！")
+                        tos("t2${Thread.currentThread()} IO协程执行完成！")
                         dia.dismiss()
                     }
                 }
-               tos("t3${Thread.currentThread()}Io协程 在 主协程启动")
+                tos("t3${Thread.currentThread()}Io协程 在 主协程启动")
                 //当前协程 主协程：Thread[main,5,main]}
                 Log.d("@@thread4:", Thread.currentThread().toString())
                 true

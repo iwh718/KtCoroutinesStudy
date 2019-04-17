@@ -5,9 +5,12 @@
 
 内部使用了部分Design库的组件。
 增加shortCuts的支持。
+增加RecyclerView的示例
 ![Image text](./examples_img/1.png)
 ![Image text](./examples_img/s2.png)
 ![Image text](./examples_img/3.png)
 ![Image text](./examples_img/4.png)
 ![Image text](./examples_img/5.png)
 ![Image text](./examples_img/6.png)
+![Image text](./examples_img/7.jpg)
+![Image text](./examples_img/8.png)
