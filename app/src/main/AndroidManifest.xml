@@ -3,15 +3,19 @@
           package="iwh.com.simplewen.win0.ktcoroutinesstudy">
 
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
+            android:allowBackup="false"
+            android:icon="@drawable/new_ic"
             android:label="@string/app_name"
             android:resizeableActivity="true"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@drawable/new_ic"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".Main2Activity"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".DesignDemo"
+        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge">
+        </activity>
+        <activity
+                android:name=".Main2Activity"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
                 android:name=".MainActivity"

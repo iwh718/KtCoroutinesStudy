@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+    <item android:id="@+id/BottomBarLeft"
+          android:title="左边"
+          android:icon="@drawable/bottom_bar_left"
+
+          app:showAsAction="never"/>
+    <item android:id="@+id/BottomBarCenter"
+          android:title="中间"
+          android:icon="@drawable/bottom_bar_left"
+
+    />
+    <item android:id="@+id/bottomBarRight"
+          android:title="右面"
+
+          android:icon="@drawable/ic_color"
+    />
+</menu>

@@ -1,14 +1,12 @@
-package iwh.com.simplewen.win0.ktcoroutinesstudy
+package iwh.com.simplewen.win0.ktcoroutinesstudy.Adapter
 
-import android.media.Image
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import iwh.com.simplewen.win0.ktcoroutinesstudy.R
 
 /**
  * recycle示例
@@ -24,12 +22,14 @@ class MyRecycle(private val max:Int,private val type:Int = 0): RecyclerView.Adap
     override fun onCreateViewHolder(p0: ViewGroup, viewType: Int): MyViewHolder {
 
         return  when(type){
+            //宽度100%
            0-> MyViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.my_recycle, p0, false)).apply {
                this.tv.setOnClickListener{
                    Toast.makeText(p0.context,"点击：${this.adapterPosition} 个！",Toast.LENGTH_SHORT).show()
                }
 
            }
+            //宽度自适应
             else -> MyViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.my_recycle_2, p0, false)).apply{
                 this.tv.setOnClickListener{
                     Toast.makeText(p0.context,"点击：${this.adapterPosition} 个！",Toast.LENGTH_SHORT).show()

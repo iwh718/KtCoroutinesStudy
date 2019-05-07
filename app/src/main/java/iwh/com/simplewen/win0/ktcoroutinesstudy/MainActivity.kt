@@ -1,34 +1,31 @@
 package iwh.com.simplewen.win0.ktcoroutinesstudy
 
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.Color
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.text.Layout
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
+import iwh.com.simplewen.win0.ktcoroutinesstudy.Adapter.MyRecycle
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.nav_header.*
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.concurrent.thread
@@ -43,7 +40,7 @@ import kotlin.concurrent.thread
 //该注解去除IDE的实验性API提示
 @ExperimentalCoroutinesApi
 class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelectedListener {
-    private lateinit var dia: AlertDialog
+    private lateinit var dia: android.app.AlertDialog
     private val ms = "这是第一个Kotlin协程Demo!"
     private val ms2 = "hello,world!"
     private val ms3 = "author:by-iwh 2019"
@@ -60,8 +57,12 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
+        this@MainActivity.orderEx()
         toolbar.subtitle = "kotlin练习demo"
+
+
+
+
         //检测shortCuts
         when (intent.action) {
             "IWH" -> tos("通过shortCuts进入：${intent.action}")
@@ -76,33 +77,34 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
                 .setIcon(Icon.createWithResource(this@MainActivity, R.drawable.ic_launcher_one))
                 .setDisabledMessage("暂时不可以使用！")
                 .setIntent(Intent(
-                    this@MainActivity, iwh.com.simplewen.win0.ktcoroutinesstudy.MainActivity::class.java)
+                    this@MainActivity, iwh.com.simplewen.win0.ktcoroutinesstudy.MainActivity::class.java
+                )
                     .apply { action = "IWH3" })
                 .build()
             this.dynamicShortcuts = Arrays.asList(s1)
         }
         //设置Recycle列表
-        val myRecycle  = recycle
+        val myRecycle = recycle
         val myRecycleHor = recycle_hor
         val myRecycleStagger = recycle_stagger
-        val sym = StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL)
+        val sym = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         val lym = LinearLayoutManager(this)
-        val hym = LinearLayoutManager(this).apply{
+        val hym = LinearLayoutManager(this).apply {
             this.orientation = LinearLayoutManager.HORIZONTAL
         }
         //竖向Recycle
-        myRecycle.apply{
+        myRecycle.apply {
             this.layoutManager = lym
             this.adapter = MyRecycle(20)
 
         }
         //横向Recycle
-        myRecycleHor.apply{
-            this.layoutManager =hym
-            this.adapter = MyRecycle(10,1)
+        myRecycleHor.apply {
+            this.layoutManager = hym
+            this.adapter = MyRecycle(10, 1)
         }
         //瀑布流
-        myRecycleStagger.apply{
+        myRecycleStagger.apply {
             this.layoutManager = sym
             this.adapter = MyRecycle(max = 10)
         }
@@ -133,7 +135,8 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
         }
         //处理预制数据
         ani = ObjectAnimator.ofFloat(fab, "rotation", 0f, 360f)
-        dia = AlertDialog.Builder(this@MainActivity).setTitle("开启Io协程").setView(ProgressBar(this@MainActivity)).create()
+        dia = android.app.AlertDialog.Builder(this@MainActivity).setTitle("开启Io协程")
+            .setView(ProgressBar(this@MainActivity)).create()
         //开始协程
         initCoroutines()
         //设置动画
@@ -161,7 +164,12 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
      */
     private fun initCoroutines() = launch {
         fabAnimation(true)
-        val f1 = async { changeTv() }
+        Log.d("@@开始执行f1","-----")
+        val f1 = async {
+            Log.d("@@开始执行f1内部","-----")
+            changeTv()
+        }
+        Log.d("@@开始执行f2","-----")
         val f2 = async { changeTv2() }
         setFab(0)
         flag1 = f1.await()
@@ -208,12 +216,12 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         return when (p0.itemId) {
             R.id.nav_1 -> {
-                tos("你点击：item1")
-                draw.closeDrawer(GravityCompat.START)
+                startActivity(Intent(this@MainActivity, DesignDemo::class.java))
+                //draw.closeDrawer(GravityCompat.START)
                 true
             }
             R.id.nav_2 -> {
-                startActivity(Intent(this@MainActivity,Main2Activity::class.java))
+                startActivity(Intent(this@MainActivity, Main2Activity::class.java))
                 true
             }
             else -> true
@@ -308,6 +316,27 @@ class MainActivity : BaseCoroutinesScope(), NavigationView.OnNavigationItemSelec
             currentColorMode = "sun"
         }
     }
+
+
+    //依次执行
+    private fun orderEx() = launch {
+        launch {
+            repeat(10) {
+                //delay(500)
+                Log.d("@@order1:", "=======$it=========")
+            }
+            launch {
+                Log.d("@@order1 内部","===============")
+            }
+
+        }
+        launch {
+            Log.d("@@order2:", "================")
+        }
+
+    }
+
+
 
 
 }
